@@ -5,10 +5,12 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public CharacterController controller;
-    public float speed;
+    public float defaultSpeed;
+    private float currentSpeed;
 
     private void Start()
     {
+        currentSpeed = defaultSpeed;
         InputManager.onMoveInput += MoveHandler;
     }
 
@@ -21,6 +23,16 @@ public class PlayerMovement : MonoBehaviour
     {
         movement = movement.normalized;
         Vector3 newMovement = new Vector3(movement.x, 0, movement.y);
-        controller.Move(newMovement * speed * Time.deltaTime);
+        controller.Move(newMovement * currentSpeed * Time.deltaTime);
+    }
+
+    public void ModifySpeed(float newSpeed)
+    {
+        currentSpeed += newSpeed;
+    }
+
+    public void ResetSpeed()
+    {
+        currentSpeed = defaultSpeed;
     }
 }

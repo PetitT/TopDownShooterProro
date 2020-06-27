@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using LowTeeGames.HelperClasses;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -24,7 +25,8 @@ public class EnnemyBehaviour : MonoBehaviour
     {
         currentState = EnnemyState.wander;
         target = null;
-        currentAttack = Helper.GetRandomInCollection(GetComponentsInChildren<EnnemyAttack>());
+        canAttack = true;
+        currentAttack = RandomHelper.GetRandomInCollection(GetComponentsInChildren<EnnemyAttack>());
     }
 
     private void Update()
@@ -65,7 +67,7 @@ public class EnnemyBehaviour : MonoBehaviour
 
     private void CheckDistance()
     {
-        distanceFromPlayer = Vector3.Distance(transform.position, target.position);
+        distanceFromPlayer = agent.remainingDistance;
         if (distanceFromPlayer < minRange)
         {
             agent.isStopped = true;

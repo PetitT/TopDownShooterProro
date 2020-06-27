@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LowTeeGames;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,7 @@ public class MultiShoot : RangeAttack
             newProjectile.GetComponent<DamageDealer>().damage = damage;
             newProjectile.GetComponent<ForwardMoving>().speed = speed;
             newProjectile.GetComponent<ProjectileAllegiance>().allegiance = Allegiance.allied;
+            newProjectile.GetComponent<MeshRenderer>().material.color = Color.green;
         }
 
         yield return new WaitForSeconds(cooldown);

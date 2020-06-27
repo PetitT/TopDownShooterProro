@@ -1,1 +1,1 @@
-﻿public enum MeleeName { baseMelee }
+﻿public enum MeleeName { baseMelee, whirlwind, NoU, TORNADO }

@@ -1,1 +1,1 @@
-﻿public enum ArmorName { noArmor }
+﻿public enum ArmorName { noArmor, healthBag, maxiBoost, joggingPants }

@@ -4,19 +4,24 @@ using UnityEngine;
 
 public class EnnemyHealth : MonoBehaviour
 {
+    public EnnemyHealthDisplay display;
+    public EnnemyLoot loot;
     public int maxHealth;
     private int currentHealth;
 
-    private void Start()
+    private void OnEnable()
     {
         currentHealth = maxHealth;
+        display.UpdateHealth(currentHealth, maxHealth);
     }
-
+    
     private void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        display.UpdateHealth(currentHealth, maxHealth);
         if(currentHealth <= 0)
         {
+            loot.Loot();
             gameObject.SetActive(false);
         }
     }
@@ -36,6 +41,7 @@ public class EnnemyHealth : MonoBehaviour
 
         if (other.CompareTag("MeleeWeapon"))
         {
+            Debug.Log("hiku");
             int damage = other.GetComponent<DamageDealer>().damage;
             TakeDamage(damage);
         }

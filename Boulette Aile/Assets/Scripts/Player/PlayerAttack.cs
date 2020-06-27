@@ -6,15 +6,15 @@ public class PlayerAttack : MonoBehaviour
 {
     public AttackPool attackPool;
 
-    private MeleeName startMeleeWeapon = MeleeName.baseMelee;
-    private RangeName startRangeWeapon = RangeName.baseRange;
+    public MeleeName startMeleeWeapon;
+    public RangeName startRangeWeapon;
 
     private bool canAttack = true;
 
-    private MeleeAttack currentMelee;
-    private int meleeAmmo;
-    private RangeAttack currentRange;
-    private int rangeAmmo;
+    public MeleeAttack currentMelee { get; private set; }
+    public int meleeAmmo { get; private set; }
+    public RangeAttack currentRange { get; private set; }
+    public int rangeAmmo { get; private set; }
 
     private void Start()
     {
@@ -24,6 +24,8 @@ public class PlayerAttack : MonoBehaviour
         InputManager.onRangeAttack += RangeAttackHandler;
         InputManager.onMeleeAttack += MeleeAttackHandler;
         PlayerWeaponCollider.onWeaponCollided += WeaponCollideHandler;
+        PlayerCollision.onMeleeLoot += MeleeLootHandler;
+        PlayerCollision.onRangeLoot += RangeLootHandler;
     }
 
     private void OnDestroy()
@@ -31,21 +33,38 @@ public class PlayerAttack : MonoBehaviour
         InputManager.onRangeAttack -= RangeAttackHandler;
         InputManager.onMeleeAttack -= MeleeAttackHandler;
         PlayerWeaponCollider.onWeaponCollided -= WeaponCollideHandler;
+        PlayerCollision.onMeleeLoot -= MeleeLootHandler;
+        PlayerCollision.onRangeLoot -= RangeLootHandler;
+    }
+
+
+    private void RangeLootHandler(RangeName obj)
+    {
+        ModifyWeapon(obj);
+    }
+
+    private void MeleeLootHandler(MeleeName obj)
+    {
+        ModifyWeapon(obj);
     }
 
     private void RangeAttackHandler()
     {
         if (canAttack)
         {
-            if (meleeAmmo != 0)
+            if (rangeAmmo != 0)
             {
                 canAttack = false;
                 rangeAmmo--;
-                StartCoroutine(currentMelee.DoAttack(() => canAttack = true));
+                StartCoroutine(currentRange.DoAttack(() => canAttack = true));
+                if(rangeAmmo <= 0)
+                {
+                    ModifyWeapon(RangeName.baseRange);
+                }
             }
             else
             {
-                ModifyWeapon(MeleeName.baseMelee);
+                ModifyWeapon(RangeName.baseRange);
             }
         }
     }
@@ -57,11 +76,11 @@ public class PlayerAttack : MonoBehaviour
             if (meleeAmmo != 0)
             {
                 canAttack = false;
-                StartCoroutine(currentRange.DoAttack(() => canAttack = true));
+                StartCoroutine(currentMelee.DoAttack(() => canAttack = true));
             }
             else
             {
-                ModifyWeapon(RangeName.baseRange);
+                ModifyWeapon(MeleeName.baseMelee);
             }
         }
     }
@@ -69,6 +88,10 @@ public class PlayerAttack : MonoBehaviour
     private void WeaponCollideHandler()
     {
         meleeAmmo--;
+        if(meleeAmmo <= 0)
+        {
+            ModifyWeapon(MeleeName.baseMelee);
+        }
     }
 
     private void ModifyWeapon(MeleeName attackName)

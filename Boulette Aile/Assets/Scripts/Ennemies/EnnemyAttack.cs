@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LowTeeGames;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,6 +25,7 @@ public class EnnemyAttack : MonoBehaviour
             newProjectile.GetComponent<DamageDealer>().damage = damage;
             newProjectile.GetComponent<ForwardMoving>().speed = speed;
             newProjectile.GetComponent<ProjectileAllegiance>().allegiance = Allegiance.ennemy;
+            newProjectile.GetComponent<MeshRenderer>().material.color = Color.red;
         }
 
         yield return new WaitForSeconds(cooldown);

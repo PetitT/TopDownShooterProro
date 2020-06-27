@@ -8,11 +8,13 @@ public class InputManager : MonoBehaviour
     public static event Action<Vector2> onMoveInput;
     public static event Action onMeleeAttack;
     public static event Action onRangeAttack;
+    public static event Action onArmorAction;
 
     private void Update()
     {
         GetMoveInput();
         GetMouseInput();
+        GetArmorInput();
     }
 
     private void GetMoveInput()
@@ -33,6 +35,14 @@ public class InputManager : MonoBehaviour
         if (Input.GetMouseButton(1))
         {
             onRangeAttack?.Invoke();
+        }
+    }
+
+    private void GetArmorInput()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            onArmorAction?.Invoke();
         }
     }
 }

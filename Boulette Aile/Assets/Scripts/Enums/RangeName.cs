@@ -1,1 +1,1 @@
-﻿public enum RangeName { baseRange }
+﻿public enum RangeName { baseRange, tripleShoot, shotgun, megaShotgun }
